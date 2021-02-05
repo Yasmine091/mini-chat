@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const PORT = 3002
 var moment = require('moment');
 var LocalStorage = require('node-localstorage').LocalStorage,
-localStorage = new LocalStorage('./scratch');
+  localStorage = new LocalStorage('./scratch');
 
 /* require("moment/min/locales");
 require('moment/locale/fr') */
@@ -49,6 +49,8 @@ mongoose.connect('mongodb://localhost:27017/minichat', { useNewUrlParser: true }
     // On se sert de socket IO pour emettre / diffuser des événéments
     io.on('connection', (socket) => {
 
+      let login = socket.id;
+
       // Ici: renvoyer l'historique stocké dans mongo ?
       ChatLogs.find({}).then((chats) => {
         io.emit('getMessages', chats);
@@ -58,8 +60,8 @@ mongoose.connect('mongodb://localhost:27017/minichat', { useNewUrlParser: true }
       socket.on('newUser', (username) => {
 
         // On le rajoute à la liste des utiliseurs
-        Users.findOne({usrname: username}, (err, exists) => {
-          if(exists == null) {
+        Users.findOne({ usrname: username }, (err, exists) => {
+          if (exists == null) {
             let uid = new mongoose.Types.ObjectId();
             let users = new Users();
             users._id = uid;
@@ -70,17 +72,18 @@ mongoose.connect('mongodb://localhost:27017/minichat', { useNewUrlParser: true }
             // On prévient tout le monde de son arrivé
             io.emit('newNotification', username + ' vient de nous rejoindre');
             localStorage.setItem('pseudo', username)
+            localStorage.setItem('id', uid)
           }
           else {
             let msg = 'Le nom d\'utilisateur ' + username + ' est déjà pris';
             io.emit('alertUser', username, msg);
-            }
-          })
+          }
+        })
 
       })
 
       socket.on('userExists', (username) => {
-        
+
         // On prévient tout le monde de son arrivé
         io.emit('newNotification', username + ' vient de se connecter');
 
@@ -89,6 +92,39 @@ mongoose.connect('mongodb://localhost:27017/minichat', { useNewUrlParser: true }
           io.emit('updateUsersList', userl);
         })
       })
+
+      // Sur l'action d'un nouveau message reçu
+      socket.on('updateUser', (username, nick, pic) => {
+
+        let userid = localStorage.getItem('id')
+
+        // On le rajoute à la liste des utiliseurs
+        Users.findOne({ _id: { $ne: userid }, usrname: username }, (err, exists) => {
+          if (exists == null) {
+            Users.findByIdAndUpdate({ _id: userid }, { usrname: nick, picture: pic }, (err, success) => {
+              if (err) {
+                console.log('Erreur lors de la màj');
+              }
+              else {
+                io.emit('newNotification', username + ' à changé de pseudo, à ' + nick);
+                localStorage.removeItem('pseudo');
+                localStorage.setItem('pseudo', nick)
+              }
+            })
+          }
+          else {
+            let msg = 'Le nom d\'utilisateur ' + username + ' est déjà pris';
+            io.emit('alertUser', username, msg);
+          }
+        })
+
+        Users.find({}).then((userl) => {
+          io.emit('updateUsersList', userl);
+        })
+
+        // On diffuse le message à tout le monde
+        io.emit('updateUser', username, nick, pic);
+      });
 
       // Sur l'action d'un nouveau message reçu
       socket.on('newMessage', (username, msg, date) => {
@@ -118,7 +154,7 @@ mongoose.connect('mongodb://localhost:27017/minichat', { useNewUrlParser: true }
 
         let users = new Users();
         users.deleteOne({ usrname: username });
-        localStorage.removeItem('pseudo');
+        //localStorage.removeItem('pseudo');
 
         // On demande à tous le monde mettre à jour la liste des utilisateurs
         Users.find({}).then((userl) => {

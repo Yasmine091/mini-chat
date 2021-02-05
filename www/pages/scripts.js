@@ -4,6 +4,7 @@ moment().format();
 const socket = io()
 
 let username = localStorage.getItem('pseudo')
+let userid = localStorage.getItem('id')
 const messages = document.getElementById('messages')
 const form = document.getElementById('form')
 const input = document.getElementById('input')
@@ -14,11 +15,23 @@ const user_nick = document.getElementById('user_nick')
 const onlineUsers = document.getElementById('users');
 
 // Demande du pseudo utilisateur (si pas dans le localstorage)
-
-while (!username) {
+if(username){
+    socket.emit('newUser', username)
+}
+else
+{
+while(!username) {
     username = prompt('Quel est votre pseudo')
     socket.emit('newUser', username)
 }
+}
+
+/* setTimeout(function(){
+    if(!userid){
+        localStorage.removeItem('pseudo');
+        location.reload()
+    }
+}, 3000); */
 
 socket.emit('userExists', username)
 
