@@ -4,20 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat</title>
-    <link rel="stylesheet" href="/styles.css">
+    <link rel="stylesheet" href="./assets/css/styles.css">
 </head>
 <body>
     <div class="app">
-      <div class="users">
+      <div class="users" id="users-side-panel">
+        <button id="menu">☰</button>
         <ul id="users">
         </ul>
-        <div class="settings-bar">
+        <div class="settings-bar" id="settings-bar">
           <button id="settings-btn">Paramètres</button>
           <form id="settings-form" action="">
             <label for="user_nick">Pseudo :</label>
             <input id="user_nick" autocomplete="off" placeholder="Votre pseudo"/>
             <label for="user_pic">Image de profil :</label>
             <input id="user_pic" autocomplete="off" placeholder="https://exemple.fr/canard.gif"/>
+            <label for="remember_me" title="Ne pas effacer mes donnés lorsque je quitte le chat">Se souvenir de moi</label>
+            <input type="checkbox" id="remember_me" name="remember_me">
             <button>Envoyer</button>
           </form>
         </div>
@@ -28,13 +31,14 @@
           </ul>
           <form id="form" action="">
             <input id="input" autocomplete="off" placeholder="Votre message.."/><button>Envoyer</button>
-          </form>    
+          </form>
         </div>
       </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="moment.js"></script>
-    <script src="scripts.js"></script>
+    <script src="./assets/js/moment.min.js"></script>
+    <script src="fr.js"></script>
+    <script type="module" src="./assets/js/scripts.js"></script>
 </body>
 </html>

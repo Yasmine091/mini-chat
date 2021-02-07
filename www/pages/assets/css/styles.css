@@ -4,13 +4,34 @@ body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+form>button:hover {
+    background-color: #353535 !important;
+}
+
+button#menu {
+    background: #00000082;
+    margin: 0.25rem auto;
+    display: none;
+    border: 0px;
+    font-size: 4rem;
+    line-height: 0rem;
+    height: 4rem;
+    border-radius: 5px;
+    color: #fff;
+    padding: 0 0.3rem;
+}
+
+button:hover {
+    background-color: #353535 !important;
+}
+
 #form {
     background: #205C40;
     bottom: 0;
     right: 0;
     display: flex;
     width: 75vw;
-    height: 3rem;
+    height: 7vh;
     box-sizing: border-box;
     backdrop-filter: blur(10px);
     position: absolute;
@@ -43,7 +64,7 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    height: 100%;
+    height: 93vh;
     overflow: auto;
     background-color: #21B36A;
 }
@@ -58,7 +79,25 @@ body {
 }
 
 #messages>li:nth-child(odd) {
-    background: #ffffff73;
+    background: #ffffff50;
+}
+
+#messages>li>i {
+    color: #000000a8;
+    font-size: small;
+}
+
+.notif {
+    font-weight: bolder;
+    color: #ffffff;
+    text-transform: uppercase;
+}
+
+.media {
+    border-radius: 0.5rem;
+    width: 100%;
+    height: 15rem;
+    max-width: 25rem;
 }
 
 .users {
@@ -108,6 +147,9 @@ body {
 
 .content {
     width: 75vw;
+    height: 100vh;
+    background: #205C40;
+    z-index: 0;
 }
 
 .settings-bar {
@@ -175,4 +217,47 @@ body {
     padding: 0.5rem;
     flex-grow: 1;
     display: block;
+}
+
+@media only screen and (max-width: 650px) {
+
+    #form {
+        width: 100vw;
+        z-index: -1;
+    }
+
+    .content {
+        width: 100vw;
+    }
+
+    .users {
+        background: #00594f;
+        height: 100vh;
+        width: 4rem;
+        overflow: auto;
+        /*position: absolute;*/
+    }
+    
+    button#menu {
+        display: block;
+    }
+
+    #users>li>p{
+        display: none;
+    }
+
+    #users>li {
+        width: min-content;
+    }
+
+    .settings-bar {
+        display: none;
+    }
+
+    .settings-bar, .settings-bar>button
+    #settings-form, #settings-form>label, 
+    #settings-form>button, #user_nick, #user_pic {
+        width: 93vw;
+    }
+
 }
