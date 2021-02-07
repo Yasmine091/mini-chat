@@ -1,24 +1,27 @@
+# Mini Chat
+
 ## Guide d'installation
 * Pour installer et configurer le site, fais ceci dans le terminal :
 ```
-    · git clone git@gitlab.com:Yasmine091/leprojet.git
-    cd leprojet/
-    cd core/
-    cp demo.connexion.php connexion.php
+    git clone git@gitlab.com:Yasmine091/mini-chat.git
+    cd mini-chat/
+    npm install
 ```
-* Modifie les valeurs dans le fichier connexion.php
+* Fais l'installation des frameworks (ci-dessous) et de MongoDB
+* Va sur MongoDB et crée une base de données appelé minichat
+* Ensuite crée 2 collections: chat_logs et users
 * Puis reviens au terminal et fais ceci :
 ```
-    cd ..
-    cd public/
-    php -S 0.0.0.0:8000
+    npm run www
 ```
 
-## Dépendances
-* Parcel, gulp..
+## Frameworks
+* mongoose
+* momentjs
+* node-localstorage
+
+## Autres
+* MongoDB : https://www.mongodb.com/
 
 ## Version en ligne
-* https://leprojet.surge.sh
-
-## Ressources du projet
-* Wireframe : https://www.figma.com/file/..
+* https://yas-mini-chat.herokuapp.com/
